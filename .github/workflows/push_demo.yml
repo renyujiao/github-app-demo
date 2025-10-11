@@ -1,0 +1,46 @@
+name: push demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to deploy to."
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+        default: "staging"
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  push-demo:
+    name: Push Demo
+    runs-on: ubuntu-latest
+    
+    steps:
+      #- name: Generate a token
+      #  id: generate-token
+      #  uses: actions/create-github-app-token@v2
+      #  with:
+      #    app-id: ${{ vars.APP_ID }}
+      #    private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v2
+        with:
+          # token: ${{ steps.generate-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.12"
+      - name: Force push to environment branch
+        run: |
+            git push origin HEAD:refs/heads/${{ github.event.inputs.environment }} --force
+        env:
+            # This token is provided by Actions, but may need to be a PAT
+            # if branch protection rules are in place.
+            GITHUB_TOKEN: ${{ secrets.DEPLOY_PAT || secrets.GITHUB_TOKEN }}
