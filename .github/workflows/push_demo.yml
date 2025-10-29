@@ -26,7 +26,7 @@ jobs:
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.AIRFLOW_APP_ID}}
-          private-key: ${{ secrets.AIRLFOW_APP_SECRETS}}
+          private-key: ${{ secrets.AIRFLOW_APP_SECRETS}}
 
       - uses: actions/checkout@v2
         with:
