@@ -21,12 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      #- name: Generate a token
-      #  id: generate-token
-      #  uses: actions/create-github-app-token@v2
-      #  with:
-      #    app-id: ${{ vars.APP_ID }}
-      #    private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.AIRFLOW_APP_ID}}
+          private-key: ${{ secrets.AIRLFOW_APP_SECRETS}}
 
       - uses: actions/checkout@v2
         with:
@@ -40,7 +40,5 @@ jobs:
       - name: Force push to environment branch
         run: |
             git push origin HEAD:refs/heads/${{ github.event.inputs.environment }} --force
-        env:
-            # This token is provided by Actions, but may need to be a PAT
-            # if branch protection rules are in place.
-            GITHUB_TOKEN: ${{ secrets.DEPLOY_PAT || secrets.GITHUB_TOKEN }}
+	env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
