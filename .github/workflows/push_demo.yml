@@ -40,5 +40,5 @@ jobs:
       - name: Force push to environment branch
         run: |
             git push origin HEAD:refs/heads/${{ github.event.inputs.environment }} --force
-	env:
+        env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
